@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selettore Personaggi Tragedia Greca</title>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f0f0f0; }
+        #root { max-width: 400px; margin: 0 auto; padding: 20px; }
+        select { width: 100%; padding: 10px; margin-bottom: 20px; }
+        .card { background: linear-gradient(to right, #4a90e2, #7e57c2); color: white; padding: 20px; border-radius: 10px; }
+        .card img { width: 100px; height: 100px; border-radius: 50%; display: block; margin: 0 auto 15px; }
+        .stat-bar { background-color: white; height: 10px; border-radius: 5px; margin-top: 5px; }
+        .stat-fill { height: 100%; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const CharacterCard = ({ character }) => (
+            <div className="card">
+                <h2>{character.name}</h2>
+                <img src={`https://via.placeholder.com/100?text=${character.name}`} alt={character.name} />
+                <p>{character.description}</p>
+                {Object.entries(character.stats).map(([stat, value]) => (
+                    <div key={stat}>
+                        <strong>{stat}:</strong>
+                        <div className="stat-bar">
+                            <div className="stat-fill" style={{width: `${value}%`, backgroundColor: 
+                                stat === 'Forza' ? 'red' : 
+                                stat === 'Difesa' ? 'blue' : 
+                                stat === 'Astuzia' ? 'green' : 'yellow'
+                            }}></div>
+                        </div>
+                    </div>
+                ))}
+                <p><strong>Abilità speciale:</strong> {character.specialAbility}</p>
+            </div>
+        );
+
+        const App = () => {
+            const [selectedCharacter, setSelectedCharacter] = React.useState(null);
+            
+            const characters = {
+                Menelao: {
+                    name: "Menelao",
+                    description: "Re di Sparta, marito di Elena e zio di Oreste. Cerca di mediare nella vicenda.",
+                    stats: { Forza: 70, Difesa: 60, Astuzia: 75, Empatia: 65 },
+                    specialAbility: "Diplomazia: può influenzare le decisioni altrui con la sua autorità regale."
+                },
+                Oreste: {
+                    name: "Oreste",
+                    description: "Figlio di Agamennone e Clitemnestra, fratello di Elettra. Tormentato dal matricidio, cerca vendetta e redenzione.",
+                    stats: { Forza: 70, Difesa: 60, Astuzia: 80, Empatia: 50 },
+                    specialAbility: "Visioni divine: può comunicare con gli dei, ma a costo della sua sanità mentale."
+                },
+                Elettra: {
+                    name: "Elettra",
+                    description: "Sorella di Oreste, figlia di Agamennone e Clitemnestra. Determinata a vendicare il padre.",
+                    stats: { Forza: 65, Difesa: 55, Astuzia: 85, Empatia: 60 },
+                    specialAbility: "Persuasione: può influenzare le azioni altrui con la sua eloquenza appassionata."
+                },
+                Clitemnestra: {
+                    name: "Clitemnestra",
+                    description: "Madre di Oreste ed Elettra, assassina di Agamennone. Appare come fantasma.",
+                    stats: { Forza: 60, Difesa: 70, Astuzia: 80, Empatia: 40 },
+                    specialAbility: "Presenza spettrale: può apparire nei sogni e tormentare i vivi."
+                },
+                Ermione: {
+                    name: "Ermione",
+                    description: "Figlia di Menelao ed Elena, promessa sposa di Oreste.",
+                    stats: { Forza: 50, Difesa: 65, Astuzia: 70, Empatia: 75 },
+                    specialAbility: "Lealtà: può rafforzare i legami tra i personaggi, influenzando le loro decisioni."
+                },
+                Tindaro: {
+                    name: "Tindaro",
+                    description: "Padre di Clitemnestra, nonno di Oreste ed Elettra. Critica aspramente le azioni di Oreste.",
+                    stats: { Forza: 55, Difesa: 75, Astuzia: 85, Empatia: 60 },
+                    specialAbility: "Autorità morale: può influenzare il giudizio pubblico con i suoi discorsi."
+                }
+            };
+
+            return (
+                <div>
+                    <select onChange={(e) => setSelectedCharacter(characters[e.target.value])}>
+                        <option value="">Seleziona un personaggio</option>
+                        {Object.keys(characters).map(name => (
+                            <option key={name} value={name}>{name}</option>
+                        ))}
+                    </select>
+                    {selectedCharacter && <CharacterCard character={selectedCharacter} />}
+                </div>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
